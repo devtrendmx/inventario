@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ventas - Sistema de Inventarios</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body class="bg-gray-50 flex h-screen overflow-hidden">
+    <div id="sidebar-container"
+        class="w-64 bg-slate-900 text-white flex-shrink-0 hidden md:flex flex-col transition-all duration-300"></div>
+
+    <div class="flex-1 flex flex-col overflow-hidden">
+        <header class="h-16 bg-white shadow-sm flex items-center justify-between px-6 z-10">
+            <h1 class="text-xl font-semibold text-gray-800">Registro de Ventas</h1>
+            <div class="flex items-center space-x-4">
+                <button id="new-sale-btn"
+                    class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md flex items-center shadow-sm">
+                    <i data-lucide="shopping-cart" class="w-4 h-4 mr-2"></i>
+                    Nueva Venta
+                </button>
+            </div>
+        </header>
+
+        <main class="flex-1 overflow-x-hidden overflow-y-auto p-6">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Recent Sales List -->
+                <div class="lg:col-span-3 bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Historial de Ventas</h3>
+                    <div id="sales-table-container"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Template -->
+
+    <script type="module" src="./sales.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>

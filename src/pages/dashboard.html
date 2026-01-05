@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Sistema de Inventarios</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body class="bg-gray-50 flex h-screen overflow-hidden">
+    <!-- Sidebar Container -->
+    <div id="sidebar-container"
+        class="w-64 bg-slate-900 text-white flex-shrink-0 hidden md:flex flex-col transition-all duration-300"></div>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col overflow-hidden">
+        <!-- Header -->
+        <header class="h-16 bg-white shadow-sm flex items-center justify-between px-6 z-10">
+            <button id="mobile-menu-btn" class="md:hidden text-gray-600 focus:outline-none">
+                <i data-lucide="menu"></i>
+            </button>
+            <h1 class="text-xl font-semibold text-gray-800">Dashboard</h1>
+            <div class="flex items-center space-x-4">
+                <span id="user-name" class="text-sm text-gray-600">Usuario</span>
+                <button id="logout-btn" class="p-2 text-red-500 hover:bg-red-50 rounded-full transition-colors">
+                    <i data-lucide="log-out" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main View Area -->
+        <main class="flex-1 overflow-x-hidden overflow-y-auto p-6">
+            <div id="stats-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <!-- Stat Cards will be injected here -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 animate-pulse h-32"></div>
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 animate-pulse h-32"></div>
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 animate-pulse h-32"></div>
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 animate-pulse h-32"></div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 min-h-[400px]">
+                    <h3 class="text-lg font-medium text-gray-800 mb-4">Ventas Recientes</h3>
+                    <div id="sales-chart-container" class="w-full h-full"></div>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 min-h-[400px]">
+                    <h3 class="text-lg font-medium text-gray-800 mb-4">Top Productos</h3>
+                    <div id="top-products-container" class="w-full h-full"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module" src="./dashboard.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>
