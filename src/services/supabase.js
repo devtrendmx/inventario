@@ -140,3 +140,49 @@ export async function updateProfileRole(id, role) {
     .select()
   return { data, error }
 }
+
+export async function createUserSafe(email, password, role) {
+  // WORKAROUND: Create a temporary client to sign up a new user 
+  // without logging out the current admin.
+  // This avoids the default behavior of signUp which sets the session.
+
+  const tempSupabase = createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY, {
+    auth: {
+      persistSession: false,
+      autoRefreshToken: false,
+      detectSessionInUrl: false
+    }
+  });
+
+  // 1. Create the user (this triggers the handle_new_user function in DB)
+  const { data, error } = await tempSupabase.auth.signUp({
+    email,
+    password,
+    options: {
+      data: {
+        full_name: 'Usuario Nuevo',
+      }
+    }
+  });
+
+  if (error) return { error };
+
+  // 2. If successful, use the MAIN client (Super Admin) to set the correct role
+  // We need to wait a small bit for the trigger to create the profile, or just try updating.
+  if (data.user) {
+    // Give the trigger a moment (optional but safer)
+    await new Promise(r => setTimeout(r, 1000));
+
+    const { error: updateError } = await supabase
+      .from('profiles')
+      .update({ role: role })
+      .eq('id', data.user.id);
+
+    if (updateError) {
+      console.error("Error asignando rol:", updateError);
+      return { data, error: { message: "Usuario creado pero falló la asignación de rol. Edítalo manualmente." } };
+    }
+  }
+
+  return { data, error };
+}
