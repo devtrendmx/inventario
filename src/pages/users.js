@@ -79,8 +79,7 @@ function handleEdit(id) {
     modal.open();
 }
 
-modal.open();
-}
+
 
 async function openCreateUserModal() {
     const content = `
