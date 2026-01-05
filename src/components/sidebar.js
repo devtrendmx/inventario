@@ -48,6 +48,42 @@ export function renderSidebar(containerId, activePath = './dashboard.html') {
 
     container.appendChild(nav);
 
+    // Mobile Menu Logic
+    const mobileBtn = document.getElementById('mobile-menu-btn');
+    if (mobileBtn) {
+        // Create overlay if it doesn't exist
+        let overlay = document.getElementById('mobile-overlay');
+        if (!overlay) {
+            overlay = document.createElement('div');
+            overlay.id = 'mobile-overlay';
+            overlay.className = 'fixed inset-0 bg-black bg-opacity-50 z-40 hidden md:hidden';
+            document.body.appendChild(overlay);
+        }
+
+        const toggleMenu = () => {
+            const isHidden = container.classList.contains('hidden');
+
+            if (isHidden) {
+                // Open menu
+                container.classList.remove('hidden');
+                container.classList.add('fixed', 'inset-y-0', 'left-0', 'z-50');
+                overlay.classList.remove('hidden');
+            } else {
+                // Close menu
+                container.classList.add('hidden');
+                container.classList.remove('fixed', 'inset-y-0', 'left-0', 'z-50');
+                overlay.classList.add('hidden');
+            }
+        };
+
+        // Remove old listeners to avoid duplicates if re-rendered
+        const newBtn = mobileBtn.cloneNode(true);
+        mobileBtn.parentNode.replaceChild(newBtn, mobileBtn);
+
+        newBtn.addEventListener('click', toggleMenu);
+        overlay.addEventListener('click', toggleMenu);
+    }
+
     // Trigger Lucide icons refresh if available globally
     if (window.lucide) {
         window.lucide.createIcons();
