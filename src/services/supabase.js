@@ -118,7 +118,7 @@ export async function createMovement(movement) {
 export async function fetchMovements() {
   const { data, error } = await supabase
     .from('movements')
-    .select('*, products(id, name, sku, category, image_url), warehouses(id, name)')
+    .select('*, products(id, name, sku, category, price, image_url), warehouses(id, name)')
     .order('created_at', { ascending: false })
   return { data, error }
 }

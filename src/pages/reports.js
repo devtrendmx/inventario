@@ -44,7 +44,9 @@ async function loadReports() {
         categories.add(category);
 
         if (!salesData[category]) salesData[category] = {};
-        salesData[category][date] = (salesData[category][date] || 0) + Math.abs(m.quantity);
+        const price = m.products?.price || 0;
+        const totalValue = Math.abs(m.quantity) * price;
+        salesData[category][date] = (salesData[category][date] || 0) + totalValue;
     });
 
     const seriesConfig = Array.from(categories).map((category, index) => {
