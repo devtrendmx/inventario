@@ -32,21 +32,36 @@ async function loadReports() {
     const movements = movRes.data;
     const inventory = invRes.data;
 
-    // 1. Sales per Day (OUT movements)
-    // Group by Date
-    const salesByDate = {};
+    // 1. Sales per Day by Category (OUT movements)
+    // Group by Date AND Category
+    const salesData = {};
+    const categories = new Set();
+    const colors = ['#2563eb', '#dc2626', '#16a34a', '#d97706', '#9333ea', '#0891b2', '#be123c'];
+
     movements.filter(m => m.type === 'OUT').forEach(m => {
         const date = m.created_at.split('T')[0];
-        salesByDate[date] = (salesByDate[date] || 0) + Math.abs(m.quantity);
+        const category = m.products?.category || 'Sin Categoría';
+        categories.add(category);
+
+        if (!salesData[category]) salesData[category] = {};
+        salesData[category][date] = (salesData[category][date] || 0) + Math.abs(m.quantity);
     });
 
-    const salesData = Object.keys(salesByDate).sort().map(date => ({
-        time: date,
-        value: salesByDate[date]
-    }));
+    const seriesConfig = Array.from(categories).map((category, index) => {
+        const data = Object.keys(salesData[category]).sort().map(date => ({
+            time: date,
+            value: salesData[category][date]
+        }));
 
-    if (salesData.length > 0) {
-        ChartFactory.createAreaChart('sales-chart', salesData);
+        return {
+            title: category,
+            data: data,
+            color: colors[index % colors.length]
+        };
+    });
+
+    if (seriesConfig.length > 0) {
+        ChartFactory.createMultiLineChart('sales-chart', seriesConfig);
     } else {
         document.getElementById('sales-chart').innerHTML = 'No hay datos de ventas';
     }
